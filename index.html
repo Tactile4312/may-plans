@@ -1,0 +1,877 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Boyet & Peachy's May</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23E91E63' d='M12 21s-7.5-4.6-9.7-9.4C.6 7.9 3 4 6.8 4c2.1 0 3.6 1.1 5.2 3 1.6-1.9 3.1-3 5.2-3C21 4 23.4 7.9 21.7 11.6 19.5 16.4 12 21 12 21z'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+/* Layout: sticky section nav over one scrolling planner — overview cards, calendar, four week plans, tracker table, savings. */
+:root{
+  --pink:#F8BBD0; --blush:#FCE4EC; --rose:#E91E63; --rose-ink:#C2185B;
+  --bg:#FFF8FA; --card:#FFFFFF; --ink:#3D3035; --muted:#7D6A72; --line:#F3D9E3;
+  --green:#5E9C76; --green-bg:#E6F2EA; --amber:#B7791F; --amber-bg:#FBF0DC; --red:#C0392B; --red-bg:#FBE3E0;
+  --chip:#FDEEF3; --shadow:0 1px 2px rgba(120,40,70,.06),0 6px 18px rgba(120,40,70,.06);
+  --p1:#E91E63; --p2:#F48FB1; --both:#5E9C76;
+  --f-display:"Young Serif",Georgia,"Times New Roman",serif;
+  --f-body:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r:18px; --r-sm:12px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --pink:#5A2C3D; --blush:#3A2430; --rose:#F06292; --rose-ink:#F8A5C2;
+  --bg:#1E1619; --card:#2A1F24; --ink:#F6E8EE; --muted:#BFA6B1; --line:#43303A;
+  --green:#8CC9A2; --green-bg:#21352A; --amber:#E7B65C; --amber-bg:#3A2E1A; --red:#F08A7E; --red-bg:#3E2222;
+  --chip:#36252D; --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.25);
+  --p1:#F06292; --p2:#F8BBD0; --both:#8CC9A2; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --pink:#5A2C3D; --blush:#3A2430; --rose:#F06292; --rose-ink:#F8A5C2;
+  --bg:#1E1619; --card:#2A1F24; --ink:#F6E8EE; --muted:#BFA6B1; --line:#43303A;
+  --green:#8CC9A2; --green-bg:#21352A; --amber:#E7B65C; --amber-bg:#3A2E1A; --red:#F08A7E; --red-bg:#3E2222;
+  --chip:#36252D; --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.25);
+  --p1:#F06292; --p2:#F8BBD0; --both:#8CC9A2; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 60px}
+h1,h2,h3{font-family:var(--f-display);font-weight:400;margin:0;text-wrap:balance;line-height:1.15}
+h1{font-size:clamp(28px,5vw,42px)}
+h2{font-size:clamp(22px,3.2vw,28px)}
+h3{font-size:18px}
+.eyebrow{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--rose-ink)}
+.muted{color:var(--muted)}
+.num{font-variant-numeric:tabular-nums}
+a{color:var(--rose-ink)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--rose);outline-offset:2px}
+
+/* header */
+.top{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;justify-content:space-between}
+.top .names{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:6px}
+.name-in{border:1px dashed var(--line);background:transparent;border-radius:10px;padding:2px 8px;width:9ch;font-weight:700}
+.heart{width:14px;height:14px;fill:var(--rose);flex:none}
+.save-state{font-size:13px;display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:var(--chip)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.dot.ok{background:var(--green)} .dot.warn{background:var(--amber)}
+
+nav.sec{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);margin:16px 0 8px;padding-block:8px;border-bottom:1px solid var(--line);display:flex;gap:6px;overflow-x:auto}
+nav.sec a{white-space:nowrap;text-decoration:none;color:var(--ink);font-weight:700;font-size:14px;padding:6px 12px;border-radius:999px}
+nav.sec a:hover{background:var(--chip)}
+
+section{margin-top:34px;scroll-margin-top:70px}
+.sec-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:10px;margin-bottom:14px}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:18px;min-width:0}
+
+/* banner */
+.demo-banner{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;background:var(--blush);border:1px solid var(--pink);border-radius:var(--r-sm);padding:10px 14px;margin-top:16px;font-size:14px}
+
+/* KPI */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:2px;min-width:0}
+.kpi .lab{font-size:12px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.kpi .val{font-size:24px;font-weight:800}
+.kpi .sub{font-size:12.5px;color:var(--muted)}
+.kpi.edit .val input{width:100%;font-size:22px;font-weight:800;border:1px dashed var(--pink);background:var(--blush);border-radius:10px;padding:2px 8px}
+.kpi.hero{background:var(--rose);border-color:var(--rose);color:#fff}
+.kpi.hero .lab,.kpi.hero .sub{color:rgba(255,255,255,.85)}
+.pos{color:var(--green)} .neg{color:var(--red)}
+.kpi.hero .pos,.kpi.hero .neg{color:#fff}
+
+.countdown{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin-top:12px;padding:12px 16px;border-radius:var(--r-sm);background:var(--card);border:1px solid var(--line)}
+.countdown b{font-size:20px}
+
+/* charts */
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.chart-box{position:relative;height:250px}
+.chart-note{font-size:13px;margin-top:8px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}}
+
+/* calendar */
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.cal .dow{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);text-align:center;padding-bottom:2px}
+.day{min-height:92px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:6px;display:flex;flex-direction:column;gap:4px;text-align:left;cursor:pointer;min-width:0}
+.day:hover{border-color:var(--rose)}
+.day .n{font-weight:800;font-size:13px}
+.day.blank{background:transparent;border:none;cursor:default}
+.day.has{background:var(--blush)}
+.day .ev{font-size:12px;line-height:1.25;font-weight:700;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
+.day .add{font-size:11.5px;color:var(--muted)}
+.day.today{outline:2px solid var(--rose)}
+.wk-tag{font-size:10.5px;font-weight:800;color:var(--rose-ink)}
+@media (max-width:620px){.day{min-height:58px;padding:4px}.day .ev{-webkit-line-clamp:2;font-size:10.5px}.day .add{display:none}.wk-tag{display:none}}
+
+/* status pills */
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:800;border-radius:999px;padding:2px 9px;white-space:nowrap}
+.st-Planned{background:var(--chip);color:var(--rose-ink)}
+.st-Completed{background:var(--green-bg);color:var(--green)}
+.st-Postponed{background:var(--amber-bg);color:var(--amber)}
+.tag{font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--chip);color:var(--muted)}
+.tag.free{background:var(--green-bg);color:var(--green)}
+
+/* weeks */
+.weeks{display:grid;gap:18px}
+.week h3{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline}
+.week h3 small{font-family:var(--f-body);font-size:13px;color:var(--muted)}
+.dates{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;margin-top:10px}
+@media (max-width:400px){.dates{grid-template-columns:1fr}}
+.dc{display:flex;flex-direction:column;gap:10px}
+.dc .hd{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.dc .when{font-size:12.5px;font-weight:800;color:var(--rose-ink)}
+.dc p{margin:0;font-size:14px}
+.costs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;background:var(--bg);border-radius:12px;padding:8px}
+.costs div{display:flex;flex-direction:column;min-width:0}
+.costs span{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.costs b{font-size:14px}
+.dc .where{font-size:13px;color:var(--muted)}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.row.sp{justify-content:space-between}
+.mini{display:flex;flex-direction:column;gap:3px;font-size:12px;font-weight:700;color:var(--muted)}
+.field{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:6px 9px;min-width:0}
+.field.money{width:110px}
+textarea.field{width:100%;resize:vertical;min-height:38px}
+.tt{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;text-decoration:none;padding:5px 10px;border-radius:999px;border:1px solid var(--line);background:var(--card)}
+.tt:hover{border-color:var(--rose)}
+.tt svg{width:13px;height:13px;fill:currentColor}
+
+/* buttons */
+.btn{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:7px 14px;font-weight:700;cursor:pointer;font-size:14px}
+.btn:hover{border-color:var(--rose)}
+.btn.pri{background:var(--rose);border-color:var(--rose);color:#fff}
+.btn.pri:hover{filter:brightness(1.05)}
+.btn.sm{padding:4px 10px;font-size:13px}
+.btn.danger{color:var(--red)}
+.btn.ghost{background:transparent}
+
+/* filters */
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chipbtn{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:5px 12px;font-weight:700;font-size:13px;cursor:pointer}
+.chipbtn[aria-pressed="true"]{background:var(--rose);color:#fff;border-color:var(--rose)}
+
+/* table */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--card)}
+table{border-collapse:collapse;width:100%;min-width:900px;font-size:14px}
+th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:800;background:var(--bg)}
+tr:last-child td{border-bottom:none}
+td.r,th.r{text-align:right}
+.rate{display:flex;gap:1px}
+.rate button{border:none;background:none;padding:1px;cursor:pointer;line-height:0}
+.rate svg{width:16px;height:16px;fill:var(--line)}
+.rate svg.on{fill:var(--rose)}
+.empty{padding:22px;text-align:center;color:var(--muted)}
+
+/* savings */
+.save-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:760px){.save-cards{grid-template-columns:1fr}}
+.save-cards .big{font-size:28px;font-weight:800}
+.bar{height:12px;border-radius:999px;background:var(--blush);overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;background:var(--green);border-radius:999px}
+.bar.p1 i{background:var(--p1)} .bar.p2 i{background:var(--p2)}
+.split{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+
+.cats{display:grid;gap:8px}
+.cat-row{display:grid;grid-template-columns:110px 1fr 90px;gap:10px;align-items:center;font-size:13.5px}
+.cat-row .track{height:10px;border-radius:999px;background:var(--blush);position:relative;overflow:hidden}
+.cat-row .track i{position:absolute;inset:0 auto 0 0;background:var(--pink)}
+.cat-row .track b{position:absolute;inset:0 auto 0 0;background:var(--rose);height:4px;top:3px;border-radius:999px}
+
+/* modal */
+.scrim{position:fixed;inset:0;background:rgba(40,15,25,.45);z-index:50;display:flex;align-items:center;justify-content:center;padding:16px}
+.modal{background:var(--card);border-radius:var(--r);max-width:560px;width:100%;max-height:calc(100vh - 32px);overflow:auto;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+.form .full{grid-column:1/-1}
+.form label{display:flex;flex-direction:column;gap:4px;font-size:12.5px;font-weight:800;color:var(--muted)}
+.form .field{width:100%}
+.err{color:var(--red);font-size:13px;font-weight:700;min-height:1em}
+@media (max-width:480px){.form{grid-template-columns:1fr}}
+
+.toolbar{display:flex;flex-wrap:wrap;gap:8px}
+.places{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+@media (max-width:400px){.places{grid-template-columns:1fr}}
+.pc{display:flex;flex-direction:column;gap:8px}
+.pc.done{background:var(--bg)}
+.pc.done h3{text-decoration:line-through;text-decoration-color:var(--rose);text-decoration-thickness:2px}
+.pc .meta{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:13px;color:var(--muted)}
+.pc .meta b{color:var(--ink)}
+.pc p{margin:0;font-size:14px}
+.check{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;cursor:pointer}
+.check input{width:18px;height:18px;accent-color:var(--green)}
+.pc .actions{margin-top:auto;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.foot{margin-top:40px;font-size:13px;color:var(--muted);display:grid;gap:6px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* passcode gate */
+.gate{position:fixed;inset:0;z-index:60;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:16px}
+.gate .box{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:28px 24px;max-width:380px;width:100%;display:flex;flex-direction:column;gap:12px;text-align:center}
+.gate input{text-align:center;font-size:18px;padding:10px;letter-spacing:.1em}
+.gate .heart{width:34px;height:34px;margin:0 auto}
+</style>
+</head>
+<body>
+
+<div class="gate" id="gate" hidden>
+  <form class="box" id="gateForm" novalidate>
+    <svg class="heart" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.7-9.4C.6 7.9 3 4 6.8 4c2.1 0 3.6 1.1 5.2 3 1.6-1.9 3.1-3 5.2-3C21 4 23.4 7.9 21.7 11.6 19.5 16.4 12 21 12 21z"/></svg>
+    <h2>Our May planner</h2>
+    <p class="muted" style="margin:0" id="gateMsg">Enter our passcode to open it.</p>
+    <input class="field" id="gatePass" type="password" autocomplete="current-password" placeholder="Passcode" aria-label="Passcode">
+    <button class="btn pri" type="submit" id="gateBtn">Open planner</button>
+    <div class="err" id="gateErr" role="alert"></div>
+  </form>
+</div>
+
+<div class="wrap" id="app">
+  <header class="top">
+    <div>
+      <div class="eyebrow" id="monthLabel">May 2027 date planner</div>
+      <h1><span id="h1n1">Boyet</span> &amp; <span id="h1n2">Peachy</span>'s May</h1>
+      <div class="names muted">
+        <label for="n1" class="mini" style="flex-direction:row;align-items:center;gap:6px">Partner 1 <input id="n1" class="name-in" maxlength="20"></label>
+        <svg class="heart" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.7-9.4C.6 7.9 3 4 6.8 4c2.1 0 3.6 1.1 5.2 3 1.6-1.9 3.1-3 5.2-3C21 4 23.4 7.9 21.7 11.6 19.5 16.4 12 21 12 21z"/></svg>
+        <label for="n2" class="mini" style="flex-direction:row;align-items:center;gap:6px">Partner 2 <input id="n2" class="name-in" maxlength="20"></label>
+      </div>
+    </div>
+    <div class="row"><div class="save-state" id="saveState"><span class="dot"></span><span>Loading…</span></div><button class="btn sm ghost" id="signOutBtn" hidden>Lock</button></div>
+  </header>
+
+  <div class="demo-banner" id="demoBanner" hidden>
+    <span><b>Demo progress:</b> the first three dates, their spending, and four savings entries are sample data so you can see how everything fills in.</span>
+    <button class="btn sm" id="clearDemoBtn">Clear demo data</button>
+  </div>
+
+  <nav class="sec" aria-label="Sections">
+    <a href="#overview">Overview</a><a href="#calendar">Calendar</a><a href="#weeks">Week plans</a><a href="#places">Places to go</a><a href="#tracker">Tracker</a><a href="#savings">Savings</a><a href="#data">Backup</a>
+  </nav>
+
+  <!-- OVERVIEW -->
+  <section id="overview">
+    <div class="sec-head"><h2>Budget overview</h2><span class="muted" style="font-size:13px">Tap the pink boxes to change your budget.</span></div>
+    <div class="kpis" id="kpis"></div>
+    <div class="countdown" id="countdown"></div>
+    <div class="grid2" style="margin-top:14px">
+      <div class="card"><h3>Planned vs actual, by week</h3><div class="chart-box"><canvas id="chD" aria-label="Planned versus actual spending by week"></canvas></div><div class="chart-note" id="chDnote"></div></div>
+      <div class="card"><h3>Where the money goes</h3><p class="muted" style="font-size:13px;margin:4px 0 12px">Light bar = planned, dark line = actually spent.</p><div class="cats" id="cats"></div></div>
+    </div>
+  </section>
+
+  <!-- CALENDAR -->
+  <section id="calendar">
+    <div class="sec-head"><div><h2>May calendar</h2><span class="muted" style="font-size:13px">Tap any day to edit its date, or an empty day to add one.</span></div></div>
+    <div class="cal" id="cal"></div>
+  </section>
+
+  <!-- WEEKS -->
+  <section id="weeks">
+    <div class="sec-head"><h2>Week plans</h2></div>
+    <div class="weeks" id="weekList"></div>
+  </section>
+
+  <!-- PLACES -->
+  <section id="places">
+    <div class="sec-head"><div><h2>Places to go</h2><span class="muted" style="font-size:13px">Save spots you see on TikTok, Maps or Facebook. Tap “Plan it” to put one on the calendar.</span></div>
+      <div class="row"><div class="chips" id="pfilters" role="group" aria-label="Filter places"></div><button class="btn pri" id="addPlaceBtn">Add a place</button></div></div>
+    <div class="places" id="placeList"></div>
+  </section>
+
+  <!-- TRACKER -->
+  <section id="tracker">
+    <div class="sec-head"><h2>Date tracker</h2><div class="chips" id="filters" role="group" aria-label="Filter dates"></div></div>
+    <div class="tbl-wrap"><table><thead><tr><th>Date</th><th>Activity</th><th class="r">Planned</th><th>Actual spent</th><th>Status</th><th>Ideas</th><th>Rating</th><th>Memory</th></tr></thead><tbody id="tbody"></tbody></table></div>
+    <p class="muted" style="font-size:13px">Marking a date Completed counts it as done, but it only adds to spending once you type the actual amount.</p>
+  </section>
+
+  <!-- SAVINGS -->
+  <section id="savings">
+    <div class="sec-head"><h2>Our savings</h2><div class="toolbar"><button class="btn pri" id="addContribBtn">Add contribution</button></div></div>
+    <div class="save-cards" id="saveCards"></div>
+    <div class="grid2" style="margin-top:14px">
+      <div class="card"><h3>Who saved what</h3><div class="chart-box"><canvas id="chA" aria-label="Contribution comparison"></canvas></div></div>
+      <div class="card"><h3>Progress to target</h3><div class="chart-box"><canvas id="chB" aria-label="Combined savings progress"></canvas></div><div class="chart-note" id="chBnote"></div></div>
+    </div>
+    <div class="card" style="margin-top:14px"><h3>Savings over May</h3><div class="chart-box" style="height:270px"><canvas id="chC" aria-label="Cumulative savings over time"></canvas></div></div>
+    <div class="card" style="margin-top:14px;padding:0;overflow:hidden">
+      <div class="row sp" style="padding:14px 18px"><h3>Contributions</h3><span class="muted" style="font-size:13px" id="contribCount"></span></div>
+      <div class="tbl-wrap" style="border:none;border-radius:0"><table style="min-width:640px"><thead><tr><th>Date</th><th>Who</th><th class="r">Amount</th><th>Type</th><th>For</th><th>Note</th><th></th></tr></thead><tbody id="cbody"></tbody></table></div>
+    </div>
+  </section>
+
+  <!-- DATA -->
+  <section id="data">
+    <div class="sec-head"><h2>Backup &amp; reset</h2></div>
+    <div class="card">
+      <p style="margin-top:0" id="storageExplain"></p>
+      <div class="toolbar">
+        <button class="btn" id="csvBtn">Export CSV</button>
+        <button class="btn" id="jsonBtn">Export backup</button>
+        <label class="btn" for="importFile" style="display:inline-flex;align-items:center">Import backup</label>
+        <input type="file" id="importFile" accept=".json,application/json" hidden>
+        <button class="btn danger" id="resetBtn">Reset to the original plan</button>
+      </div>
+      <div id="exportFallback" hidden style="margin-top:12px">
+        <p class="muted" style="font-size:13px;margin:0 0 6px">Your browser couldn't download the file. Copy the text below and paste it into a file instead.</p>
+        <textarea id="exportText" class="field" rows="6" readonly></textarea>
+        <button class="btn sm" id="copyExport" style="margin-top:6px">Copy</button>
+      </div>
+      <div class="err" id="importErr"></div>
+    </div>
+  </section>
+
+  <div class="foot">
+    <span>TikTok buttons open a TikTok search for that kind of date, not a specific video.</span>
+    <span>Costs are estimates for a couple in Cavite and Tagaytay; adjust them to what you actually see.</span>
+  </div>
+</div>
+
+<div id="modalRoot"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+/* ====== SETTINGS: paste your Firebase details here (see SETUP.md) ====== */
+window.PLANNER_SETTINGS = {
+  firebaseConfig: {
+    apiKey: "AIzaSyBwCRA5ksNWqtTyIG7laURDoiXxDadta5A",
+    authDomain: "our-planner-736e7.firebaseapp.com",
+    projectId: "our-planner-736e7",
+    appId: "1:1074885631859:web:3d48774c77df07083daf06"
+  },
+  // The login email you created in Firebase Authentication. The passcode is that account's password.
+  loginEmail: "karenarellano576@gmail.com"
+};
+/* ======================================================================= */
+</script>
+<script>
+(function(){
+"use strict";
+const YEAR=2027, MONTH=4; // May (0-based)
+const DAYS_IN=new Date(YEAR,MONTH+1,0).getDate();
+const WEEKS=[
+  {n:1,from:1,to:7,theme:"Simple & affordable"},
+  {n:2,from:8,to:14,theme:"Creative"},
+  {n:3,from:15,to:21,theme:"Outdoor & adventure"},
+  {n:4,from:22,to:28,theme:"Romantic & memorable"},
+  {n:5,from:29,to:31,theme:"Open days"}
+];
+const CATS=["Café","Games","Home","Cooking","Crafts","Outdoor","Food trip","Staycation","Dinner","Other"];
+const STATUSES=["Planned","Completed","Postponed"];
+const HEART='<path d="M12 21s-7.5-4.6-9.7-9.4C.6 7.9 3 4 6.8 4c2.1 0 3.6 1.1 5.2 3 1.6-1.9 3.1-3 5.2-3C21 4 23.4 7.9 21.7 11.6 19.5 16.4 12 21 12 21z"/>';
+const PLAY='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
+
+function D(id,day,title,cat,desc,place,planned,transport,food,q,extra){
+  return Object.assign({id,day,title,cat,desc,place,planned,transport,food,q,status:"Planned",actual:null,notes:"",rating:0,span:1},extra||{});
+}
+const mapUrl=q=>"https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(q);
+function P(id,name,area,cat,cost,note){return {id,name,area,cat,cost,link:mapUrl(name+" "+area),who:"idea",note,visited:false,dateId:null}}
+function defaultPlaces(){return [
+  P("p1","People's Park in the Sky","Tagaytay","Outdoor",400,"Highest viewpoint in Tagaytay. Go early on a clear day for the Taal view."),
+  P("p2","Puzzle Mansion","Tagaytay","Other",600,"Museum of giant jigsaw puzzles. Fun if you both like games."),
+  P("p3","Museo Orlina","Tagaytay","Other",800,"Glass sculpture museum with a garden café. Quiet and pretty."),
+  P("p4","Mahogany Market","Tagaytay","Food trip",700,"Classic bulalo food trip. Cheaper than the ridge restaurants."),
+  P("p5","Caleruega Church","Nasugbu, Batangas","Outdoor",900,"Hilltop chapel and gardens. Nice for photos; about 40 min from Tagaytay."),
+  P("p6","Mt. Gulugod Baboy","Mabini, Batangas","Outdoor",1500,"Beginner-friendly sunrise hike with sea views. Needs an early start."),
+  P("p7","Nuvali","Santa Rosa, Laguna","Outdoor",800,"Bike around, feed the koi, then dinner at the lakeside strip.")
+]}
+function defaults(){
+  return {v:1,names:{p1:"Boyet",p2:"Peachy"},budget:10000,target:10000,demo:true,
+  dates:[
+    D("d1",1,"Taal View Café Date","Café","Ride up to Tagaytay, pick a ridge café facing Taal Lake, and share coffee and cake while you plan the rest of the month together.","A ridge café along Aguinaldo Hwy, Tagaytay",900,300,600,"Tagaytay cafe with Taal view",{status:"Completed",actual:850,notes:"Demo: windy but worth it, we split a slice of cheesecake.",rating:5,demoP:true}),
+    D("d2",2,"Mall & Arcade Showdown","Games","Load one arcade card and play best of five: basketball, racing, air hockey, and the claw machine. The loser treats the winner to milk tea.","Nearest mall arcade · arcade card",800,150,250,"couple arcade date",{status:"Completed",actual:920,notes:"Demo: Peachy won 3–2.",rating:4,demoP:true}),
+    D("d3",5,"Home Movie Night","Home","Lights off, blankets on, a double feature where each of you picks one film. Use snacks already in the kitchen.","Home · TV or laptop, blankets, pillows",0,0,0,"at home movie date night ideas",{status:"Completed",notes:"Demo: no-spend night.",rating:4,demoP:true}),
+    D("d4",8,"Bake Together Day","Cooking","Pick one recipe neither of you has tried, like ube crinkles, banana bread, or homemade pizza, and make it from scratch. Share a plate with family after.","Home kitchen · flour, sugar, eggs, butter, flavoring",600,0,600,"couple baking date at home"),
+    D("d5",9,"Paint Each Other Night","Crafts","Set a 30-minute timer and paint each other's portraits. Swap them at the end and keep the funniest one on display.","Home · 2 small canvases, acrylic set, brushes from a bookstore",500,0,0,"paint each other couple challenge"),
+    D("d6",12,"Couple Photo Challenge","Home","Recreate an old photo of yourselves, then shoot a 10-shot list: matching poses, a golden-hour silhouette, a candid laugh. Pick one to print later.","Your barangay, a park, or the subdivision clubhouse",0,0,0,"couple photo challenge ideas"),
+    D("d7",15,"Picnic at Picnic Grove","Outdoor","Pack sandwiches, fruit, and a mat, then picnic on the grass with the Taal breeze. Bring a deck of cards for after lunch.","Picnic Grove, Tagaytay · mat, packed food, cards",900,300,450,"couple picnic ideas Philippines"),
+    D("d8",16,"Sky Ranch Rides + Bulalo","Food trip","Ride the big Ferris wheel and a few rides, then a classic bulalo lunch and a buko pie to bring home.","Sky Ranch Tagaytay, then a bulalo spot on the ridge",1300,300,500,"Tagaytay food trip bulalo"),
+    D("d9",19,"Sunset & Stargazing Walk","Outdoor","Walk to the highest open spot near you before 6 PM, watch the sunset, then stay to find constellations with a free sky-map app.","A nearby open field, rooftop, or overlooking",0,0,0,"sunset date ideas"),
+    D("d10",22,"Tagaytay Staycation","Staycation","Check in Saturday afternoon to a cozy room with a view. Order in, play board games, sleep in, and have a slow breakfast before Sunday checkout.","Budget hotel or Airbnb in Tagaytay · board game, speaker",3500,300,1000,"Tagaytay staycation couple",{span:2}),
+    D("d11",26,"Memory Jar & Handmade Gifts","Crafts","Each of you writes 15 small notes of favorite memories for a shared jar and makes a small gift from things at home. Exchange them over coffee.","Home · a jar, paper, pens, craft scraps",0,0,0,"handmade gift ideas for couples"),
+    D("d12",28,"Romantic Dinner Date","Dinner","Dress up a little, book a table with a view, and end the month with a toast to what you saved together.","A ridge restaurant in Tagaytay, or somewhere special closer to home",1200,200,1000,"romantic dinner date Tagaytay")
+  ],
+  places:defaultPlaces(),
+  contribs:[
+    {id:"c1",date:"2027-05-01",who:"p1",amount:2000,type:"Digital",note:"Payday transfer",purpose:"Staycation",demo:true},
+    {id:"c2",date:"2027-05-01",who:"p2",amount:1500,type:"Cash",note:"",purpose:"Date fund",demo:true},
+    {id:"c3",date:"2027-05-08",who:"p1",amount:1000,type:"Cash",note:"",purpose:"Date fund",demo:true},
+    {id:"c4",date:"2027-05-10",who:"p2",amount:1500,type:"Digital",note:"GCash",purpose:"Staycation",demo:true}
+  ]};
+}
+
+/* ---------- state + persistence ---------- */
+let S=defaults();
+let mode="loading"; // shared | local | readonly | none
+let dbRef=null, lastJSON="", saveTimer=null, writing=false, pendingWrite=false;
+const LS_KEY="bp-may-planner-v1";
+function lsGet(){try{const t=localStorage.getItem(LS_KEY);return t?JSON.parse(t):null}catch(e){return null}}
+function lsSet(){try{localStorage.setItem(LS_KEY,JSON.stringify(S));return true}catch(e){return false}}
+function valid(o){return o&&typeof o==="object"&&Array.isArray(o.dates)&&Array.isArray(o.contribs)&&o.names}
+function norm(o){ if(!Array.isArray(o.places)) o.places=defaultPlaces(); return o }
+const fromLS=lsGet(); if(valid(fromLS)) S=norm(fromLS);
+
+function commit(){ // after any change
+  lsSet();
+  queueRender();
+  if(mode==="shared"&&dbRef){clearTimeout(saveTimer);saveTimer=setTimeout(flush,700)}
+}
+async function flush(){
+  if(!dbRef) return;
+  if(writing){pendingWrite=true;return}
+  writing=true; setSave("busy");
+  const json=JSON.stringify(S);
+  try{await dbRef.set({state:json,updatedAt:Date.now()});lastJSON=json;setSave()}
+  catch(e){ if(e&&e.code==="permission-denied"){mode="readonly"} setSave("err") }
+  writing=false; if(pendingWrite){pendingWrite=false;flush()}
+}
+function setSave(flag){
+  const el=document.getElementById("saveState"); let cls="",txt="";
+  if(flag==="busy"){cls="warn";txt="Saving…"}
+  else if(flag==="err"){cls="warn";txt=mode==="readonly"?"Not allowed to save: check the database rules":"Couldn't sync, saved on this phone"}
+  else if(mode==="shared"){cls="ok";txt="Synced for both of us"}
+  else if(mode==="local"){cls="warn";txt="Saved on this phone only"}
+  else if(mode==="none"){cls="";txt="Not saved: export a backup"}
+  else {txt="Connecting…"}
+  el.innerHTML='<span class="dot '+cls+'"></span><span>'+txt+'</span>';
+  const ex=document.getElementById("storageExplain");
+  ex.textContent = mode==="shared" ? "Your plan saves automatically and syncs between both of your phones. Export a backup anytime to keep your own copy."
+   : "Syncing isn't set up yet, so this page saves on this phone only. The other person won't see your changes, and clearing browser data erases them. Export a backup to keep a copy or move it to another phone.";
+}
+(function connect(){
+  const cfg=window.PLANNER_SETTINGS||{}, fc=cfg.firebaseConfig||{};
+  const ready=window.firebase&&fc.apiKey&&!/PASTE/.test(fc.apiKey+fc.projectId)&&cfg.loginEmail&&!/PASTE/.test(cfg.loginEmail);
+  const gate=document.getElementById("gate"), app=document.getElementById("app"), out=document.getElementById("signOutBtn");
+  if(!ready){ mode=lsSet()?"local":"none"; gate.hidden=true; app.hidden=false; setSave(); return }
+  firebase.initializeApp(fc);
+  const auth=firebase.auth(), fs=firebase.firestore();
+  let unsub=null;
+  app.hidden=true; gate.hidden=true;
+  auth.onAuthStateChanged(u=>{
+    if(unsub){unsub();unsub=null}
+    if(!u){ dbRef=null; mode="loading"; app.hidden=true; gate.hidden=false; out.hidden=true; setTimeout(()=>document.getElementById("gatePass").focus(),50); return }
+    gate.hidden=true; app.hidden=false; out.hidden=false;
+    dbRef=fs.collection("planner").doc("may2027"); mode="shared"; setSave();
+    unsub=dbRef.onSnapshot(snap=>{
+      if(snap.metadata.hasPendingWrites||!snap.exists) return; // first edit creates it
+      const d=snap.data(); if(!d||typeof d.state!=="string"||d.state===lastJSON) return;
+      if(d.state===JSON.stringify(S)){lastJSON=d.state;return}
+      try{const o=JSON.parse(d.state); if(valid(o)){S=norm(o);lastJSON=d.state;lsSet();queueRender()}}catch(e){}
+    },e=>{ mode="local"; setSave("err") });
+    setTimeout(()=>renderCharts(totals()),30);
+  });
+  document.getElementById("gateForm").addEventListener("submit",e=>{
+    e.preventDefault(); const p=document.getElementById("gatePass"), err=document.getElementById("gateErr"), b=document.getElementById("gateBtn");
+    if(!p.value){err.textContent="Type the passcode first.";return}
+    err.textContent=""; b.disabled=true; b.textContent="Opening…";
+    auth.signInWithEmailAndPassword(cfg.loginEmail,p.value).then(()=>{p.value=""}).catch(x=>{
+      const c=x&&x.code||"";
+      err.textContent=/too-many-requests/.test(c)?"Too many tries. Wait a few minutes and try again."
+        :/network/.test(c)?"No internet connection. Check your signal and try again."
+        :/wrong-password|invalid-credential|invalid-login-credentials|user-not-found/.test(c)?"That passcode isn't right."
+        :"Couldn't open the planner ("+c+"). Check the settings in SETUP.md.";
+    }).finally(()=>{b.disabled=false;b.textContent="Open planner"});
+  });
+  out.addEventListener("click",()=>auth.signOut());
+})();
+
+/* ---------- helpers ---------- */
+const peso=n=>"₱"+Math.round(n||0).toLocaleString("en-PH");
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const nm=k=>(S.names[k]||(k==="p1"?"Partner 1":"Partner 2"));
+const dateOf=day=>new Date(YEAR,MONTH,day);
+const fmtDay=day=>dateOf(day).toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"});
+const wkOf=day=>WEEKS.find(w=>day>=w.from&&day<=w.to);
+const ttUrl=q=>"https://www.tiktok.com/search?q="+encodeURIComponent(q||"couple date ideas");
+function money(v){ if(v===""||v==null) return null; const n=Number(v); if(!isFinite(n)) return NaN; return Math.round(n*100)/100 }
+const sorted=()=>S.dates.slice().sort((a,b)=>a.day-b.day);
+const uid=p=>p+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+
+function totals(){
+  const planned=S.dates.reduce((s,d)=>s+(+d.planned||0),0);
+  const actual=S.dates.reduce((s,d)=>s+(d.actual!=null?+d.actual:0),0);
+  const completed=S.dates.filter(d=>d.status==="Completed").length;
+  const p1=S.contribs.filter(c=>c.who==="p1").reduce((s,c)=>s+(+c.amount||0),0);
+  const p2=S.contribs.filter(c=>c.who==="p2").reduce((s,c)=>s+(+c.amount||0),0);
+  const combined=p1+p2;
+  return {planned,actual,completed,p1,p2,combined,
+    remaining:(+S.budget||0)-actual,
+    avg:completed>0?actual/completed:0,
+    unspent:Math.max(0,combined-actual),
+    progress:(+S.target>0)?combined/S.target*100:0,
+    left:Math.max(0,(+S.target||0)-combined)};
+}
+
+/* ---------- render ---------- */
+let rq=false;
+function queueRender(){ if(rq) return; rq=true; requestAnimationFrame(()=>{rq=false; const a=document.activeElement&&document.activeElement.id; render(); if(a){const e=document.getElementById(a); if(e) e.focus({preventScroll:true})}}) }
+
+function render(){
+  const t=totals();
+  document.getElementById("h1n1").textContent=nm("p1");
+  document.getElementById("h1n2").textContent=nm("p2");
+  const n1=document.getElementById("n1"), n2=document.getElementById("n2");
+  if(document.activeElement!==n1) n1.value=S.names.p1||""; if(document.activeElement!==n2) n2.value=S.names.p2||"";
+  document.getElementById("demoBanner").hidden=!(S.contribs.some(c=>c.demo)||S.dates.some(d=>d.demoP));
+  renderKpis(t); renderCountdown(); renderCats(); renderCal(); renderWeeks(); renderPlaces(); renderTable(); renderSavings(t); renderCharts(t);
+}
+
+function renderKpis(t){
+  const over=t.remaining<0;
+  document.getElementById("kpis").innerHTML=`
+  <div class="kpi edit"><span class="lab">Monthly budget</span><span class="val num"><input id="budgetIn" type="number" min="0" step="100" inputmode="decimal" value="${+S.budget||0}" aria-label="Monthly budget"></span><span class="sub">What you allow for dates</span></div>
+  <div class="kpi"><span class="lab">Planned expenses</span><span class="val num">${peso(t.planned)}</span><span class="sub ${t.planned>S.budget?"neg":""}">${t.planned>S.budget?peso(t.planned-S.budget)+" over budget":peso(S.budget-t.planned)+" buffer left"}</span></div>
+  <div class="kpi"><span class="lab">Actually spent</span><span class="val num">${peso(t.actual)}</span><span class="sub">Money already gone</span></div>
+  <div class="kpi hero"><span class="lab">Remaining budget</span><span class="val num">${over?"−"+peso(-t.remaining):peso(t.remaining)}</span><span class="sub">${over?"Over budget":"Budget minus spent"}</span></div>
+  <div class="kpi"><span class="lab">Couple savings</span><span class="val num">${peso(t.combined)}</span><span class="sub">${peso(t.unspent)} saved, not yet spent</span></div>
+  <div class="kpi"><span class="lab">Dates completed</span><span class="val num">${t.completed} <small class="muted" style="font-size:14px">of ${S.dates.length}</small></span><span class="sub">${S.dates.filter(d=>d.status==="Postponed").length} postponed</span></div>
+  <div class="kpi"><span class="lab">Avg cost per date</span><span class="val num">${peso(t.avg)}</span><span class="sub">Spent ÷ completed dates</span></div>`;
+}
+
+function renderCountdown(){
+  const now=new Date(); now.setHours(0,0,0,0);
+  const up=sorted().filter(d=>d.status!=="Completed"&&dateOf(d.day)>=now);
+  const el=document.getElementById("countdown");
+  if(!up.length){el.innerHTML=`<span class="muted">No upcoming dates left in May. Add one on an open day.</span>`;return}
+  const d=up[0], days=Math.round((dateOf(d.day)-now)/864e5);
+  el.innerHTML=`<span class="eyebrow">Next date</span><b>${esc(d.title)}</b><span class="muted">${fmtDay(d.day)} · ${days===0?"today":days===1?"tomorrow":days.toLocaleString()+" days to go"}</span>`;
+}
+
+function renderCats(){
+  const m={}; S.dates.forEach(d=>{const c=d.cat||"Other"; m[c]=m[c]||{p:0,a:0}; m[c].p+=+d.planned||0; m[c].a+=d.actual!=null?+d.actual:0});
+  const rows=Object.entries(m).filter(([,v])=>v.p||v.a).sort((a,b)=>b[1].p-a[1].p);
+  const max=Math.max(1,...rows.map(([,v])=>Math.max(v.p,v.a)));
+  document.getElementById("cats").innerHTML=rows.length?rows.map(([k,v])=>`<div class="cat-row"><span>${esc(k)}</span><span class="track"><i style="width:${v.p/max*100}%"></i><b style="width:${v.a/max*100}%"></b></span><span class="num r" style="text-align:right">${peso(v.p)}</span></div>`).join("")
+   :`<div class="empty">No costs yet. Add a planned cost to a date to see the breakdown.</div>`;
+}
+
+function renderCal(){
+  const first=dateOf(1).getDay(); let h=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map(x=>`<div class="dow">${x}</div>`).join("");
+  for(let i=0;i<first;i++) h+=`<div class="day blank" aria-hidden="true"></div>`;
+  const today=new Date();
+  for(let day=1;day<=DAYS_IN;day++){
+    const ev=S.dates.filter(d=>d.day===day); const cont=S.dates.find(d=>d.span>1&&day>d.day&&day<d.day+d.span);
+    const isToday=today.getFullYear()===YEAR&&today.getMonth()===MONTH&&today.getDate()===day;
+    const w=wkOf(day); const tag=(w.from===day&&w.n<5)?`<span class="wk-tag">Week ${w.n}</span>`:"";
+    let inner=ev.map(d=>`<span class="ev">${esc(d.title)}</span>`).join("");
+    if(!ev.length&&cont) inner=`<span class="ev" style="opacity:.75">${esc(cont.title)} (day 2)</span>`;
+    if(!inner) inner=`<span class="add">+ Add a date</span>`;
+    h+=`<button class="day ${ev.length||cont?"has":""} ${isToday?"today":""}" data-day="${day}" aria-label="${fmtDay(day)}${ev.length?": "+esc(ev.map(e=>e.title).join(", ")):", open"}"><span class="row sp"><span class="n">${day}</span>${tag}</span>${inner}</button>`;
+  }
+  document.getElementById("cal").innerHTML=h;
+}
+
+function statusSel(d,idp){return `<select class="field" id="${idp}st-${d.id}" data-id="${d.id}" data-f="status" aria-label="Status">${STATUSES.map(s=>`<option ${d.status===s?"selected":""}>${s}</option>`).join("")}</select>`}
+
+function renderWeeks(){
+  const L=document.getElementById("weekList");
+  L.innerHTML=WEEKS.map(w=>{
+    const ds=sorted().filter(d=>d.day>=w.from&&d.day<=w.to);
+    if(w.n===5&&!ds.length) return `<div class="week card"><h3>${w.theme} <small>May ${w.from}–${w.to}</small></h3><p class="muted" style="margin:8px 0 10px">Free days for whatever you feel like. Tap a day on the calendar to plan one.</p><button class="btn sm" data-add="${w.from}">+ Add a date on May ${w.from}</button></div>`;
+    const sum=ds.reduce((s,d)=>s+(+d.planned||0),0);
+    return `<div class="week"><h3>Week ${w.n<5?w.n+": ":""}${w.theme} <small>May ${w.from}–${w.to} · ${ds.length} date${ds.length===1?"":"s"} · ${peso(sum)} planned</small></h3>
+    <div class="dates">${ds.map(d=>{
+      const pp=(+d.planned||0)/2, free=!(+d.planned);
+      return `<article class="card dc">
+        <div class="hd"><div><div class="when">${fmtDay(d.day)}${d.span>1?" – "+fmtDay(d.day+d.span-1):""}</div><h3>${esc(d.title)}</h3></div><span class="pill st-${d.status}">${d.status}</span></div>
+        <div class="row"><span class="tag">${esc(d.cat)}</span>${free?'<span class="tag free">No-spend</span>':""}</div>
+        <p>${esc(d.desc)}</p>
+        <div class="costs num"><div><span>Total</span><b>${peso(d.planned)}</b></div><div><span>Each</span><b>${peso(pp)}</b></div><div><span>Transport</span><b>${d.transport?peso(d.transport):"—"}</b></div><div><span>Food</span><b>${d.food?peso(d.food):"—"}</b></div></div>
+        <div class="where"><b>Where / bring:</b> ${esc(d.place)}</div>
+        <div class="row sp">
+          <label class="mini" for="wst-${d.id}">Status ${statusSel(d,"w")}</label>
+          <label class="mini" for="wac-${d.id}">Actual spent <input class="field money num" id="wac-${d.id}" type="number" min="0" step="10" inputmode="decimal" placeholder="₱0" data-id="${d.id}" data-f="actual" value="${d.actual!=null?d.actual:""}"></label>
+        </div>
+        <label class="mini" for="wno-${d.id}">Notes &amp; memories<textarea class="field" id="wno-${d.id}" data-id="${d.id}" data-f="notes" rows="2" placeholder="What happened, what you loved…">${esc(d.notes)}</textarea></label>
+        <div class="row sp"><a class="tt" href="${ttUrl(d.q)}" target="_blank" rel="noopener">${PLAY} TikTok ideas</a><button class="btn sm ghost" data-edit="${d.id}">Edit details</button></div>
+      </article>`}).join("")}</div></div>`;
+  }).join("");
+}
+
+let pfilter="All";
+function safeLink(u){u=(u||"").trim(); if(!u) return ""; if(!/^https?:\/\//i.test(u)) u="https://"+u; try{const x=new URL(u); return /^https?:$/.test(x.protocol)?x.href:""}catch(e){return ""}}
+function linkLabel(u){try{const h=new URL(u).hostname.replace(/^www\./,""); if(/tiktok/.test(h))return "TikTok"; if(/google|goo\.gl|maps\.app/.test(h))return "Map"; if(/facebook|fb\./.test(h))return "Facebook"; if(/instagram/.test(h))return "Instagram"; return h}catch(e){return "Link"}}
+function whoName(w){return w==="p1"||w==="p2"?nm(w):"Starter idea"}
+function renderPlaces(){
+  const L=S.places||[]; const nv=L.filter(p=>!p.visited).length;
+  document.getElementById("pfilters").innerHTML=[["All","All ("+L.length+")"],["Not yet","Not yet ("+nv+")"],["Been there","Been there ("+(L.length-nv)+")"]].map(([k,l])=>`<button class="chipbtn" data-pfilter="${k}" aria-pressed="${pfilter===k}">${l}</button>`).join("");
+  const rows=L.filter(p=>pfilter==="All"||(pfilter==="Been there")===!!p.visited);
+  document.getElementById("placeList").innerHTML=rows.length?rows.map(p=>{
+    const link=safeLink(p.link); const dd=p.dateId&&S.dates.find(d=>d.id===p.dateId);
+    return `<article class="card pc ${p.visited?"done":""}">
+      <div class="row sp" style="align-items:flex-start;flex-wrap:nowrap"><h3>${esc(p.name)}</h3><span class="tag">${esc(p.cat||"Other")}</span></div>
+      <div class="meta"><span>${esc(p.area)||"Area not set"}</span><span>about <b class="num">${peso(p.cost)}</b> for two</span></div>
+      <div class="row"><span class="pill" style="background:var(--chip);color:${p.who==="p1"?"var(--p1)":p.who==="p2"?"var(--rose-ink)":"var(--muted)"}">${p.who==="idea"?"Starter idea":"Added by "+esc(whoName(p.who))}</span>${dd?`<span class="pill st-Planned">On calendar: ${fmtDay(dd.day)}</span>`:""}</div>
+      ${p.note?`<p>${esc(p.note)}</p>`:""}
+      <div class="actions">
+        ${link?`<a class="tt" href="${esc(link)}" target="_blank" rel="noopener">${esc(linkLabel(link))} ↗</a>`:""}
+        <label class="check" for="pv-${p.id}"><input type="checkbox" id="pv-${p.id}" data-pv="${p.id}" ${p.visited?"checked":""}> Been there</label>
+      </div>
+      <div class="actions">
+        ${dd?`<button class="btn sm" data-edit="${dd.id}">Open date</button>`:`<button class="btn sm pri" data-plan="${p.id}">Plan it</button>`}
+        <button class="btn sm" data-pedit="${p.id}">Edit</button><button class="btn sm danger" data-pdel="${p.id}">Delete</button>
+      </div></article>`}).join("")
+    :`<div class="card empty" style="grid-column:1/-1">${L.length?"Nothing here for this filter.":"No places yet. Tap “Add a place” when you find somewhere you both want to try."}</div>`;
+}
+function editPlace(id){
+  const ex=id?S.places.find(p=>p.id===id):null;
+  const p=ex||{name:"",area:"",cat:"Outdoor",cost:"",link:"",who:"p1",note:""};
+  openModal(`<h3>${ex?"Edit place":"Add a place"}</h3>
+  <form class="form" id="pForm" novalidate>
+    <label class="full" for="p_name">Place<input class="field" id="p_name" maxlength="60" value="${esc(p.name)}" placeholder="e.g. Sky Ranch Tagaytay"></label>
+    <label for="p_area">Area<input class="field" id="p_area" maxlength="60" value="${esc(p.area)}" placeholder="e.g. Tagaytay"></label>
+    <label for="p_cost">Estimated cost for two ₱<input class="field num" id="p_cost" type="number" min="0" step="10" value="${p.cost}"></label>
+    <label for="p_cat">Type<select class="field" id="p_cat">${CATS.map(c=>`<option ${p.cat===c?"selected":""}>${c}</option>`).join("")}</select></label>
+    <label for="p_who">Added by<select class="field" id="p_who"><option value="p1" ${p.who==="p1"?"selected":""}>${esc(nm("p1"))}</option><option value="p2" ${p.who==="p2"?"selected":""}>${esc(nm("p2"))}</option>${p.who==="idea"?'<option value="idea" selected>Starter idea</option>':""}</select></label>
+    <label class="full" for="p_link">Link (TikTok, Google Maps, Facebook…)<input class="field" id="p_link" inputmode="url" value="${esc(p.link)}" placeholder="Paste a link"></label>
+    <label class="full" for="p_note">Why we want to go<textarea class="field" id="p_note" rows="2">${esc(p.note)}</textarea></label>
+    <div class="err full" id="pErr" role="alert"></div>
+    <div class="row full" style="justify-content:flex-end"><button type="button" class="btn" id="pCancel">Cancel</button><button type="submit" class="btn pri">${ex?"Save changes":"Add place"}</button></div>
+  </form>`,m=>{
+    m.querySelector("#pCancel").onclick=closeModal;
+    m.querySelector("#pForm").addEventListener("submit",e=>{
+      e.preventDefault(); const g=i=>m.querySelector(i).value; const err=m.querySelector("#pErr");
+      const name=g("#p_name").trim(); if(!name){err.textContent="Give the place a name.";return}
+      const cost=money(g("#p_cost")); if(cost!==null&&(isNaN(cost)||cost<0)){err.textContent="Cost can't be negative.";return}
+      const raw=g("#p_link").trim(), link=safeLink(raw); if(raw&&!link){err.textContent="That link doesn't look right. Paste the full web address.";return}
+      const o={name,area:g("#p_area").trim(),cost:cost||0,cat:g("#p_cat"),who:g("#p_who"),link,note:g("#p_note").trim()};
+      if(ex) Object.assign(ex,o); else S.places.unshift(Object.assign({id:uid("p"),visited:false,dateId:null},o));
+      closeModal(); commit();
+    });
+  });
+}
+
+let filter="All";
+function renderTable(){
+  document.getElementById("filters").innerHTML=["All",...STATUSES].map(f=>`<button class="chipbtn" data-filter="${f}" aria-pressed="${filter===f}">${f}${f==="All"?"":" ("+S.dates.filter(d=>d.status===f).length+")"}</button>`).join("");
+  const rows=sorted().filter(d=>filter==="All"||d.status===filter);
+  document.getElementById("tbody").innerHTML=rows.length?rows.map(d=>`<tr>
+    <td class="num" style="white-space:nowrap">${fmtDay(d.day)}</td>
+    <td><b>${esc(d.title)}</b></td>
+    <td class="r num">${peso(d.planned)}</td>
+    <td><input class="field money num" id="tac-${d.id}" type="number" min="0" step="10" inputmode="decimal" placeholder="₱0" data-id="${d.id}" data-f="actual" value="${d.actual!=null?d.actual:""}" aria-label="Actual spent for ${esc(d.title)}"></td>
+    <td>${statusSel(d,"t")}</td>
+    <td><a class="tt" href="${ttUrl(d.q)}" target="_blank" rel="noopener">${PLAY} TikTok</a></td>
+    <td><div class="rate" role="group" aria-label="Rating">${[1,2,3,4,5].map(i=>`<button data-rate="${d.id}" data-v="${i}" aria-label="${i} of 5"><svg viewBox="0 0 24 24" class="${i<=(d.rating||0)?"on":""}">${HEART}</svg></button>`).join("")}</div></td>
+    <td><input class="field" id="tno-${d.id}" style="width:100%;min-width:180px" data-id="${d.id}" data-f="notes" value="${esc(d.notes)}" placeholder="Add a memory" aria-label="Memory"></td>
+  </tr>`).join(""):`<tr><td colspan="8" class="empty">No ${filter.toLowerCase()} dates right now.</td></tr>`;
+}
+
+function renderSavings(t){
+  const sh1=t.combined>0?t.p1/t.combined*100:0, sh2=t.combined>0?t.p2/t.combined*100:0;
+  const prog=t.progress, over=t.combined-(+S.target||0);
+  document.getElementById("saveCards").innerHTML=`
+  <div class="card"><div class="eyebrow">${esc(nm("p1"))}'s savings</div><div class="big num">${peso(t.p1)}</div><div class="muted">${sh1.toFixed(0)}% of all contributions</div><div class="bar p1"><i style="width:${sh1}%"></i></div></div>
+  <div class="card"><div class="eyebrow">${esc(nm("p2"))}'s savings</div><div class="big num">${peso(t.p2)}</div><div class="muted">${sh2.toFixed(0)}% of all contributions</div><div class="bar p2"><i style="width:${sh2}%"></i></div></div>
+  <div class="card"><div class="eyebrow">Our combined savings</div><div class="big num">${peso(t.combined)}</div>
+    <label class="mini" for="targetIn" style="flex-direction:row;align-items:center;gap:8px;margin-top:4px">Target ₱ <input id="targetIn" class="field money num" type="number" min="0" step="100" value="${+S.target||0}"></label>
+    <div class="muted" style="margin-top:4px">${+S.target>0?(over>=0?`Target reached, ${peso(over)} extra`:`${peso(t.left)} to go`)+" · "+prog.toFixed(0)+"%":"Set a target to track progress"}</div>
+    <div class="bar"><i style="width:${Math.min(100,prog)}%"></i></div></div>`;
+  const cs=S.contribs.slice().sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:0);
+  document.getElementById("contribCount").textContent=cs.length?cs.length+" entr"+(cs.length===1?"y":"ies"):"";
+  document.getElementById("cbody").innerHTML=cs.length?cs.map(c=>`<tr>
+    <td class="num" style="white-space:nowrap">${new Date(c.date+"T00:00").toLocaleDateString("en-US",{month:"short",day:"numeric"})}</td>
+    <td><span class="pill" style="background:var(--chip);color:${c.who==="p1"?"var(--p1)":"var(--rose-ink)"}">${esc(nm(c.who))}</span>${c.demo?' <span class="tag">demo</span>':""}</td>
+    <td class="r num"><b>${peso(c.amount)}</b></td><td>${esc(c.type)}</td><td>${esc(c.purpose)||'<span class="muted">—</span>'}</td><td>${esc(c.note)||'<span class="muted">—</span>'}</td>
+    <td style="white-space:nowrap"><button class="btn sm" data-cedit="${c.id}">Edit</button> <button class="btn sm danger" data-cdel="${c.id}">Delete</button></td></tr>`).join("")
+    :`<tr><td colspan="7" class="empty">No contributions yet. Tap “Add contribution” when one of you puts money in.</td></tr>`;
+}
+
+/* ---------- charts ---------- */
+const charts={};
+function tok(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()}
+function renderCharts(t){
+  if(!window.Chart) return;
+  const ink=tok("--muted"), line=tok("--line"), p1=tok("--p1"), p2=tok("--p2"), both=tok("--both"), rose=tok("--rose"), pink=tok("--pink"), blush=tok("--blush");
+  Chart.defaults.color=ink; Chart.defaults.font.family=tok("--f-body"); Chart.defaults.borderColor=line;
+  const money=v=>"₱"+Number(v).toLocaleString("en-PH");
+  const tip={callbacks:{label:c=>(c.dataset.label?c.dataset.label+": ":"")+money(c.raw&&c.raw.y!=null?c.raw.y:c.raw)}};
+  function mk(id,cfg){ if(charts[id]) charts[id].destroy(); charts[id]=new Chart(document.getElementById(id),cfg) }
+  const base={responsive:true,maintainAspectRatio:false,animation:false};
+  // A
+  mk("chA",{type:"bar",data:{labels:[nm("p1"),nm("p2")],datasets:[{data:[t.p1,t.p2],backgroundColor:[p1,p2],borderRadius:10,maxBarThickness:80}]},
+    options:{...base,plugins:{legend:{display:false},tooltip:tip},scales:{y:{beginAtZero:true,ticks:{callback:money},grid:{color:line}},x:{grid:{display:false}}}}});
+  // B
+  const tgt=+S.target||0, done=tgt>0?Math.min(t.combined,tgt):t.combined, rest=tgt>0?Math.max(0,tgt-t.combined):0;
+  mk("chB",{type:"doughnut",data:{labels:["Saved","Still needed"],datasets:[{data:(done||rest)?[done,rest]:[0,1],backgroundColor:[both,blush],borderWidth:0}]},
+    options:{...base,cutout:"70%",plugins:{legend:{position:"bottom"},tooltip:tip}},
+    plugins:[{id:"c",afterDraw(c){const {ctx,chartArea:a}=c;ctx.save();ctx.fillStyle=tok("--ink");ctx.textAlign="center";ctx.textBaseline="middle";ctx.font="800 26px "+tok("--f-body");ctx.fillText(tgt>0?Math.round(t.progress)+"%":"—",(a.left+a.right)/2,(a.top+a.bottom)/2-6);ctx.font="12px "+tok("--f-body");ctx.fillStyle=ink;ctx.fillText("of "+money(tgt),(a.left+a.right)/2,(a.top+a.bottom)/2+16);ctx.restore()}}]});
+  document.getElementById("chBnote").textContent=tgt>0?(t.combined>=tgt?`Target reached. ${money(t.combined-tgt)} saved beyond it.`:`${money(t.left)} left to reach ${money(tgt)}.`):"Set a savings target above to see progress.";
+  // C cumulative
+  const labels=[],a1=[],a2=[],ab=[]; let c1=0,c2=0;
+  const byDay={}; S.contribs.forEach(c=>{const d=new Date(c.date+"T00:00"); let k; if(d.getFullYear()<YEAR||(d.getFullYear()===YEAR&&d.getMonth()<MONTH)) k=1; else if(d.getFullYear()===YEAR&&d.getMonth()===MONTH) k=d.getDate(); else return; (byDay[k]=byDay[k]||[]).push(c)});
+  for(let d=1;d<=DAYS_IN;d++){(byDay[d]||[]).forEach(c=>{if(c.who==="p1")c1+=+c.amount||0;else c2+=+c.amount||0}); labels.push("May "+d); a1.push(c1);a2.push(c2);ab.push(c1+c2)}
+  mk("chC",{type:"line",data:{labels,datasets:[
+    {label:nm("p1"),data:a1,borderColor:p1,backgroundColor:p1,stepped:true,pointRadius:0,borderWidth:2.5},
+    {label:nm("p2"),data:a2,borderColor:p2,backgroundColor:p2,stepped:true,pointRadius:0,borderWidth:2.5},
+    {label:"Combined",data:ab,borderColor:both,backgroundColor:both+"22",fill:true,stepped:true,pointRadius:0,borderWidth:2.5}]},
+    options:{...base,interaction:{mode:"index",intersect:false},plugins:{legend:{position:"bottom"},tooltip:tip},scales:{y:{beginAtZero:true,ticks:{callback:money},grid:{color:line}},x:{grid:{display:false},ticks:{maxTicksLimit:8,autoSkip:true}}}}});
+  // D
+  const wl=WEEKS.filter(w=>w.n<5||S.dates.some(d=>d.day>=w.from&&d.day<=w.to));
+  const pl=wl.map(w=>S.dates.filter(d=>d.day>=w.from&&d.day<=w.to).reduce((s,d)=>s+(+d.planned||0),0));
+  const ac=wl.map(w=>S.dates.filter(d=>d.day>=w.from&&d.day<=w.to).reduce((s,d)=>s+(d.actual!=null?+d.actual:0),0));
+  mk("chD",{type:"bar",data:{labels:wl.map(w=>w.n<5?"Week "+w.n:"May 29–31"),datasets:[{label:"Planned",data:pl,backgroundColor:pink,borderRadius:8},{label:"Actual",data:ac,backgroundColor:rose,borderRadius:8}]},
+    options:{...base,plugins:{legend:{position:"bottom"},tooltip:tip},scales:{y:{beginAtZero:true,ticks:{callback:money},grid:{color:line}},x:{grid:{display:false}}}}});
+  const rem=(+S.budget||0)-t.actual;
+  document.getElementById("chDnote").innerHTML= rem<0?`<b class="neg">Over budget by ${money(-rem)}.</b> Consider swapping a paid date for a no-spend one.`
+    : t.planned>(+S.budget||0)?`<b class="neg">Plans are ${money(t.planned-S.budget)} over budget.</b> Spent so far: ${money(t.actual)}.`
+    : `<b class="pos">Within budget.</b> ${money(t.actual)} spent of ${money(S.budget)}, ${money(rem)} left.`;
+}
+if(window.matchMedia){try{matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>renderCharts(totals()))}catch(e){}}
+try{new MutationObserver(()=>renderCharts(totals())).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]})}catch(e){}
+
+/* ---------- modals ---------- */
+const MR=document.getElementById("modalRoot");
+function closeModal(){MR.innerHTML=""}
+function openModal(html,onMount){
+  MR.innerHTML=`<div class="scrim" id="scrim"><div class="modal" role="dialog" aria-modal="true">${html}</div></div>`;
+  MR.querySelector("#scrim").addEventListener("click",e=>{if(e.target.id==="scrim")closeModal()});
+  const f=MR.querySelector("input,select,textarea,button"); if(f) f.focus();
+  onMount&&onMount(MR.querySelector(".modal"));
+}
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&MR.innerHTML)closeModal()});
+function confirmBox(title,msg,okLabel,fn){
+  openModal(`<h3>${esc(title)}</h3><p>${esc(msg)}</p><div class="row" style="justify-content:flex-end"><button class="btn" id="cNo">Cancel</button><button class="btn pri" id="cYes">${esc(okLabel)}</button></div>`,m=>{
+    m.querySelector("#cNo").onclick=closeModal; m.querySelector("#cYes").onclick=()=>{closeModal();fn()}; m.querySelector("#cNo").focus()});
+}
+
+function editDate(id,day,pre,placeId){
+  const ex=id?S.dates.find(d=>d.id===id):null;
+  const d=ex||Object.assign({id:null,day:day||1,title:"",cat:"Other",desc:"",place:"",planned:0,transport:0,food:0,q:"",status:"Planned",actual:null,notes:"",rating:0,span:1},pre||{});
+  openModal(`<h3>${ex?"Edit date":pre?"Plan this place":"Add a date"}</h3>
+  <form class="form" id="dForm" novalidate>
+    <label class="full" for="f_title">Activity<input class="field" id="f_title" required maxlength="60" value="${esc(d.title)}" placeholder="e.g. Kite flying at the park"></label>
+    <label for="f_day">Day in May<select class="field" id="f_day">${Array.from({length:DAYS_IN},(_,i)=>`<option value="${i+1}" ${d.day===i+1?"selected":""}>${fmtDay(i+1)}</option>`).join("")}</select></label>
+    <label for="f_cat">Type<select class="field" id="f_cat">${CATS.map(c=>`<option ${d.cat===c?"selected":""}>${c}</option>`).join("")}</select></label>
+    <label class="full" for="f_desc">What you'll do<textarea class="field" id="f_desc" rows="3">${esc(d.desc)}</textarea></label>
+    <label class="full" for="f_place">Where / what to bring<input class="field" id="f_place" value="${esc(d.place)}"></label>
+    <label for="f_planned">Planned total ₱<input class="field num" id="f_planned" type="number" min="0" step="10" value="${+d.planned||0}"></label>
+    <label for="f_span">Length<select class="field" id="f_span"><option value="1" ${d.span!==2?"selected":""}>1 day</option><option value="2" ${d.span===2?"selected":""}>Overnight (2 days)</option></select></label>
+    <label for="f_tr">Transport allowance ₱<input class="field num" id="f_tr" type="number" min="0" step="10" value="${+d.transport||0}"></label>
+    <label for="f_food">Food &amp; drinks ₱<input class="field num" id="f_food" type="number" min="0" step="10" value="${+d.food||0}"></label>
+    <label class="full" for="f_q">TikTok search words<input class="field" id="f_q" value="${esc(d.q)}" placeholder="e.g. kite flying couple date"></label>
+    <div class="err full" id="dErr" role="alert"></div>
+    <div class="row full sp">${ex?'<button type="button" class="btn danger" id="dDel">Remove this date</button>':"<span></span>"}<span class="row"><button type="button" class="btn" id="dCancel">Cancel</button><button type="submit" class="btn pri">Save</button></span></div>
+  </form>`,m=>{
+    m.querySelector("#dCancel").onclick=closeModal;
+    if(ex) m.querySelector("#dDel").onclick=()=>confirmBox("Remove this date?",`“${d.title}” and its notes will be removed from the plan.`,"Remove",()=>{S.dates=S.dates.filter(x=>x.id!==ex.id);(S.places||[]).forEach(p=>{if(p.dateId===ex.id)p.dateId=null});commit()});
+    m.querySelector("#dForm").addEventListener("submit",e=>{
+      e.preventDefault(); const g=i=>m.querySelector(i).value; const err=m.querySelector("#dErr");
+      const title=g("#f_title").trim(); if(!title){err.textContent="Give the date a name.";return}
+      const pl=money(g("#f_planned")), tr=money(g("#f_tr")), fd=money(g("#f_food"));
+      if([pl,tr,fd].some(v=>v!==null&&(isNaN(v)||v<0))){err.textContent="Amounts can't be negative.";return}
+      if((tr||0)+(fd||0)>(pl||0)){err.textContent="Transport + food is more than the planned total. Raise the total or lower the allowances.";return}
+      const o={title,day:+g("#f_day"),cat:g("#f_cat"),desc:g("#f_desc").trim(),place:g("#f_place").trim(),planned:pl||0,transport:tr||0,food:fd||0,q:g("#f_q").trim()||title,span:+g("#f_span")};
+      if(ex) Object.assign(ex,o); else { const nd=Object.assign({id:uid("d"),status:"Planned",actual:null,notes:"",rating:0},o); S.dates.push(nd); const pl=placeId&&S.places.find(x=>x.id===placeId); if(pl) pl.dateId=nd.id; }
+      closeModal(); commit();
+    });
+  });
+}
+
+function editContrib(id){
+  const ex=id?S.contribs.find(c=>c.id===id):null;
+  const today=new Date(); const def=(today.getFullYear()===YEAR&&today.getMonth()===MONTH)?today.toISOString().slice(0,10):`${YEAR}-05-01`;
+  const c=ex||{date:def,who:"p1",amount:"",type:"Cash",note:"",purpose:""};
+  openModal(`<h3>${ex?"Edit contribution":"Add contribution"}</h3>
+  <form class="form" id="cForm" novalidate>
+    <label for="c_who">Who<select class="field" id="c_who"><option value="p1" ${c.who==="p1"?"selected":""}>${esc(nm("p1"))}</option><option value="p2" ${c.who==="p2"?"selected":""}>${esc(nm("p2"))}</option></select></label>
+    <label for="c_amt">Amount ₱<input class="field num" id="c_amt" type="number" min="0" step="10" inputmode="decimal" value="${c.amount}" required></label>
+    <label for="c_date">Date<input class="field" id="c_date" type="date" value="${c.date}"></label>
+    <label for="c_type">Type<select class="field" id="c_type"><option ${c.type==="Cash"?"selected":""}>Cash</option><option ${c.type==="Digital"?"selected":""}>Digital</option></select></label>
+    <label class="full" for="c_pur">For (optional)<input class="field" id="c_pur" value="${esc(c.purpose)}" placeholder="e.g. Staycation, Date fund"></label>
+    <label class="full" for="c_note">Note (optional)<input class="field" id="c_note" value="${esc(c.note)}" placeholder="e.g. GCash transfer"></label>
+    <div class="err full" id="cErr" role="alert"></div>
+    <div class="row full" style="justify-content:flex-end"><button type="button" class="btn" id="cCancel">Cancel</button><button type="submit" class="btn pri">${ex?"Save changes":"Add"}</button></div>
+  </form>`,m=>{
+    m.querySelector("#cCancel").onclick=closeModal;
+    m.querySelector("#cForm").addEventListener("submit",e=>{
+      e.preventDefault(); const g=i=>m.querySelector(i).value; const err=m.querySelector("#cErr");
+      const amt=money(g("#c_amt")); if(amt===null||isNaN(amt)||amt<=0){err.textContent="Enter an amount above ₱0.";return}
+      const date=g("#c_date"); if(!/^\d{4}-\d{2}-\d{2}$/.test(date)){err.textContent="Pick a date.";return}
+      const o={who:g("#c_who"),amount:amt,date,type:g("#c_type"),purpose:g("#c_pur").trim(),note:g("#c_note").trim()};
+      if(ex){Object.assign(ex,o);delete ex.demo} else S.contribs.push(Object.assign({id:uid("c")},o));
+      closeModal(); commit();
+    });
+  });
+}
+
+/* ---------- events ---------- */
+document.addEventListener("change",e=>{
+  const el=e.target;
+  if(el.id==="budgetIn"||el.id==="targetIn"){
+    const v=money(el.value); if(v===null||isNaN(v)||v<0){el.value=el.id==="budgetIn"?S.budget:S.target;return}
+    if(el.id==="budgetIn") S.budget=v; else S.target=v; commit(); return;
+  }
+  if(el.id==="n1"||el.id==="n2"){S.names[el.id==="n1"?"p1":"p2"]=el.value.trim()||(el.id==="n1"?"Partner 1":"Partner 2");commit();return}
+  if(el.id==="importFile"){importFile(el.files[0]);el.value="";return}
+  if(el.dataset.pv){const p=S.places.find(x=>x.id===el.dataset.pv); if(p){p.visited=el.checked; commit()} return}
+  const id=el.dataset.id, f=el.dataset.f; if(!id||!f) return;
+  const d=S.dates.find(x=>x.id===id); if(!d) return;
+  if(f==="actual"){const v=money(el.value); if(v!==null&&(isNaN(v)||v<0)){el.value=d.actual!=null?d.actual:"";return} d.actual=v; delete d.demoP}
+  else if(f==="status"){d.status=el.value; delete d.demoP}
+  else if(f==="notes"){d.notes=el.value}
+  commit();
+});
+document.addEventListener("input",e=>{ if(e.target.id==="n1"||e.target.id==="n2"){ document.getElementById(e.target.id==="n1"?"h1n1":"h1n2").textContent=e.target.value||"…" } });
+document.addEventListener("click",e=>{
+  const b=e.target.closest("button,[data-day]"); if(!b) return;
+  if(b.dataset.day){const day=+b.dataset.day; const ev=S.dates.find(d=>d.day===day)||S.dates.find(d=>d.span>1&&day>d.day&&day<d.day+d.span); editDate(ev&&ev.id,day);return}
+  if(b.dataset.add){editDate(null,+b.dataset.add);return}
+  if(b.dataset.edit){editDate(b.dataset.edit);return}
+  if(b.dataset.filter){filter=b.dataset.filter;renderTable();return}
+  if(b.dataset.pfilter){pfilter=b.dataset.pfilter;renderPlaces();return}
+  if(b.dataset.pedit){editPlace(b.dataset.pedit);return}
+  if(b.dataset.pdel){const p=S.places.find(x=>x.id===b.dataset.pdel); confirmBox("Delete this place?",`“${p.name}” will be removed from your list. Any date already on the calendar stays.`,"Delete",()=>{S.places=S.places.filter(x=>x.id!==p.id);commit()});return}
+  if(b.dataset.plan){const p=S.places.find(x=>x.id===b.dataset.plan); const taken=new Set(S.dates.map(d=>d.day)); let day=1; for(let i=1;i<=DAYS_IN;i++){if(!taken.has(i)&&[0,6].includes(dateOf(i).getDay())){day=i;break}}
+    editDate(null,day,{title:p.name,cat:CATS.includes(p.cat)?p.cat:"Other",desc:p.note,place:p.area,planned:+p.cost||0,q:p.name+" "+p.area},p.id);return}
+  if(b.dataset.rate){const d=S.dates.find(x=>x.id===b.dataset.rate); const v=+b.dataset.v; d.rating=d.rating===v?0:v; commit();return}
+  if(b.dataset.cedit){editContrib(b.dataset.cedit);return}
+  if(b.dataset.cdel){const c=S.contribs.find(x=>x.id===b.dataset.cdel); confirmBox("Delete this contribution?",`${peso(c.amount)} from ${nm(c.who)} on ${c.date} will be removed.`,"Delete",()=>{S.contribs=S.contribs.filter(x=>x.id!==c.id);commit()});return}
+  switch(b.id){
+    case "addContribBtn": editContrib(null); break;
+    case "addPlaceBtn": editPlace(null); break;
+    case "clearDemoBtn": confirmBox("Clear demo data?","This removes the sample contributions and resets the sample progress on the first three dates. Your itinerary, budget and names stay.","Clear demo",()=>{
+      S.contribs=S.contribs.filter(c=>!c.demo); S.dates.forEach(d=>{if(d.demoP){d.status="Planned";d.actual=null;d.notes="";d.rating=0;delete d.demoP}}); S.demo=false; commit()}); break;
+    case "resetBtn": confirmBox("Reset everything?","This replaces all your edits, contributions and notes with the original May plan and demo data. Export a backup first if you want to keep anything.","Reset",()=>{const n=S.names;S=defaults();S.names=n;commit()}); break;
+    case "csvBtn": exportCSV(); break;
+    case "jsonBtn": offer("boyet-peachy-may-2027-backup.json",JSON.stringify(S,null,2)); break;
+    case "copyExport": {const ta=document.getElementById("exportText"); const v=ta.value; (navigator.clipboard?navigator.clipboard.writeText(v):Promise.reject()).then(()=>{b.textContent="Copied"},()=>{ta.select()}); break}
+  }
+});
+
+function csvCell(v){v=String(v==null?"":v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}
+function exportCSV(){
+  const L=[["Section","Date","Activity / Partner","Planned (PHP)","Actual (PHP)","Status / Type","Notes / Purpose"]];
+  sorted().forEach(d=>L.push(["Date",`${YEAR}-05-${String(d.day).padStart(2,"0")}`,d.title,d.planned,d.actual==null?"":d.actual,d.status,d.notes]));
+  S.contribs.forEach(c=>L.push(["Contribution",c.date,nm(c.who),"",c.amount,c.type,[c.purpose,c.note].filter(Boolean).join(" · ")]));
+  (S.places||[]).forEach(p=>L.push(["Place","",p.name+(p.area?" ("+p.area+")":""),p.cost,"",p.visited?"Been there":"Not yet",[whoName(p.who),p.note,p.link].filter(Boolean).join(" · ")]));
+  offer("boyet-peachy-may-2027.csv",L.map(r=>r.map(csvCell).join(",")).join("\n"));
+}
+function offer(filename,data){
+  document.getElementById("exportFallback").hidden=true;
+  try{
+    const blob=new Blob([data],{type:filename.endsWith(".csv")?"text/csv;charset=utf-8":"application/json"});
+    const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=filename;
+    document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);
+  }catch(e){ document.getElementById("exportText").value=data; document.getElementById("exportFallback").hidden=false }
+}
+function importFile(file){
+  const err=document.getElementById("importErr"); err.textContent=""; if(!file) return;
+  const r=new FileReader(); r.onload=()=>{try{const o=JSON.parse(r.result); if(!valid(o)) throw 0;
+    confirmBox("Replace the planner with this backup?","Everything on the page now will be replaced by the backup file.","Import",()=>{S=norm(o);commit()})}
+    catch(e){err.textContent="That file isn't a planner backup. Use a file made with “Export backup”."}};
+  r.readAsText(file);
+}
+
+render(); setSave();
+if(!window.Chart){const s=document.querySelector('script[src*="chart.umd"]'); s&&s.addEventListener("load",()=>renderCharts(totals()))}
+})();
+</script>
+</body>
+</html>
