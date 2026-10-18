@@ -2,7 +2,7 @@
   "name": "Boyet & Peachy's May",
   "short_name": "Our May",
   "description": "Our May date planner, budget and savings.",
-  "start_url": "./#home",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
