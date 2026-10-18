@@ -221,7 +221,8 @@ td.r,th.r{text-align:right}
   <form class="box" id="gateForm" novalidate>
     <svg class="heart" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.7-9.4C.6 7.9 3 4 6.8 4c2.1 0 3.6 1.1 5.2 3 1.6-1.9 3.1-3 5.2-3C21 4 23.4 7.9 21.7 11.6 19.5 16.4 12 21 12 21z"/></svg>
     <h2>Our May planner</h2>
-    <p class="muted" style="margin:0" id="gateMsg">Enter our passcode to open it.</p>
+    <p class="muted" style="margin:0" id="gateMsg">Who's opening it?</p>
+    <div class="chips" id="gateWho" role="group" aria-label="Who is signing in" style="justify-content:center"></div>
     <input class="field" id="gatePass" type="password" autocomplete="current-password" placeholder="Passcode" aria-label="Passcode">
     <button class="btn pri" type="submit" id="gateBtn">Open planner</button>
     <div class="err" id="gateErr" role="alert"></div>
@@ -345,8 +346,11 @@ window.PLANNER_SETTINGS = {
     projectId: "our-planner-736e7",
     appId: "1:1074885631859:web:3d48774c77df07083daf06"
   },
-  // The login email you created in Firebase Authentication. The passcode is that account's password.
-  loginEmail: "karenarellano576@gmail.com"
+  // One entry per person. Each email is a user in Firebase Authentication; its password is that person's passcode.
+  logins: [
+    { name: "Boyet",  email: "sabadojerald762@gmail.com" },
+    { name: "Peachy", email: "karenarellano576@gmail.com" }
+  ]
 };
 /* ======================================================================= */
 </script>
@@ -446,13 +450,20 @@ function setSave(flag){
 }
 (function connect(){
   const cfg=window.PLANNER_SETTINGS||{}, fc=cfg.firebaseConfig||{};
-  const ready=window.firebase&&fc.apiKey&&!/PASTE/.test(fc.apiKey+fc.projectId)&&cfg.loginEmail&&!/PASTE/.test(cfg.loginEmail);
+  const logins=(cfg.logins||[]).filter(l=>l&&l.email&&!/PASTE/.test(l.email));
+  const ready=window.firebase&&fc.apiKey&&!/PASTE/.test(fc.apiKey+fc.projectId)&&logins.length>0;
   const gate=document.getElementById("gate"), app=document.getElementById("app"), out=document.getElementById("signOutBtn");
   if(!ready){ mode=lsSet()?"local":"none"; gate.hidden=true; app.hidden=false; setSave(); return }
   firebase.initializeApp(fc);
   const auth=firebase.auth(), fs=firebase.firestore();
   let unsub=null;
   app.hidden=true; gate.hidden=true;
+  let who=0; try{const w=+localStorage.getItem("bp-who"); if(logins[w]) who=w}catch(e){}
+  const whoBox=document.getElementById("gateWho");
+  function drawWho(){ whoBox.hidden=logins.length<2; whoBox.innerHTML=logins.map((l,i)=>`<button type="button" class="chipbtn" data-who="${i}" aria-pressed="${i===who}">${String(l.name||l.email).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}</button>`).join("");
+    document.getElementById("gatePass").placeholder=(logins[who].name||"Your")+"'s passcode" }
+  whoBox.addEventListener("click",e=>{const b=e.target.closest("[data-who]"); if(!b) return; who=+b.dataset.who; try{localStorage.setItem("bp-who",String(who))}catch(x){} drawWho(); document.getElementById("gatePass").focus()});
+  drawWho();
   auth.onAuthStateChanged(u=>{
     if(unsub){unsub();unsub=null}
     if(!u){ dbRef=null; mode="loading"; app.hidden=true; gate.hidden=false; out.hidden=true; setTimeout(()=>document.getElementById("gatePass").focus(),50); return }
@@ -470,7 +481,7 @@ function setSave(flag){
     e.preventDefault(); const p=document.getElementById("gatePass"), err=document.getElementById("gateErr"), b=document.getElementById("gateBtn");
     if(!p.value){err.textContent="Type the passcode first.";return}
     err.textContent=""; b.disabled=true; b.textContent="Opening…";
-    auth.signInWithEmailAndPassword(cfg.loginEmail,p.value).then(()=>{p.value=""}).catch(x=>{
+    auth.signInWithEmailAndPassword(logins[who].email,p.value).then(()=>{p.value=""}).catch(x=>{
       const c=x&&x.code||"";
       err.textContent=/too-many-requests/.test(c)?"Too many tries. Wait a few minutes and try again."
         :/network/.test(c)?"No internet connection. Check your signal and try again."
